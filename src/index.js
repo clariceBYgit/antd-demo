@@ -8,7 +8,7 @@ import { ConfigProvider } from 'antd'
 import App from './App';
 
 // 引入不需要登录的路由
-import { mainRouter } from './routes'
+import { mainRoutes } from './routes'
 
 // 引入测试的less文件
 import './index.less'
@@ -26,7 +26,7 @@ ReactDOM.render(
         return <App {...routerProps} />
       }} />
       {
-        mainRouter.map(route => {
+        mainRoutes.map(route => {
           return <Route key={route.pathname} path={route.pathname} component={route.component} />
         })
       }

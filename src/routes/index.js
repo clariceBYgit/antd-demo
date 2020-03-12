@@ -8,9 +8,18 @@ import {
 } from '../views'
 
 
+// 根据title不同显示不同的图标(遍历)，内设一个icon属性，对应的写具体icon组件
+//在使用的文件中 先引入 Icon  通过component进行渲染出来  <Icon component={item.icon} />
+import { 
+    DashboardOutlined, 
+    UnorderedListOutlined, 
+    FormOutlined, 
+    SettingOutlined 
+} from '@ant-design/icons'
+
 
 // 这些路由需要渲染到与App同级
-export const mainRouter = [{
+export const mainRoutes = [{
     pathname: '/login',
     component: Login
 },{
@@ -19,18 +28,30 @@ export const mainRouter = [{
 }
 ]
 
-export const adminRouter = [{
+export const adminRoutes = [{
     pathname: '/admin/dashboard',
-    component: Dashboard
-},{
-    pathname: '/admin/settings',
-    component: Settings
+    component: Dashboard,
+    title: '仪表盘',
+    icon:DashboardOutlined,
+    isNav: true
 },{
     pathname: '/admin/article',
     component: ArticleList,
-    exact:true
+    exact:true,
+    title: '文章管理',
+    icon:UnorderedListOutlined,
+    isNav: true
 },{
     pathname: '/admin/article/edit/:id',
-    component: ArticleEdit
+    component: ArticleEdit,
+    // title: '文章编辑',
+    // icon:FormOutlined,
+    // isNav: true
+},{
+    pathname: '/admin/settings',
+    component: Settings,
+    title: '设置',
+    icon:SettingOutlined,
+    isNav: true
 }
 ]
