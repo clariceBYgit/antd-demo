@@ -17,22 +17,21 @@ import './index.less'
 ReactDOM.render(
   <Router>
   {/* // prefixCls  设置统一样式的前缀 */}
-    {/* <ConfigProvider locale={zhCN}>
-    <App />
-    </ConfigProvider> */}
-    <Switch>
-      <Route path="/admin" render={(routerProps) => {
-        // TOOD:权限，需要登录才能访问/admin
-        return <App {...routerProps} />
-      }} />
-      {
-        mainRoutes.map(route => {
-          return <Route key={route.pathname} path={route.pathname} component={route.component} />
-        })
-      }
-      <Redirect to='/admin' from='/' exact  />
-      <Redirect to='/404' />
-    </Switch>
+    <ConfigProvider locale={zhCN}>
+      <Switch>
+        <Route path="/admin" render={(routerProps) => {
+          // TOOD:权限，需要登录才能访问/admin
+          return <App {...routerProps} />
+        }} />
+        {
+          mainRoutes.map(route => {
+            return <Route key={route.pathname} path={route.pathname} component={route.component} />
+          })
+        }
+        <Redirect to='/admin' from='/' exact  />
+        <Redirect to='/404' />
+      </Switch>
+    </ConfigProvider>
   </Router>
 ,
  document.getElementById('root')
