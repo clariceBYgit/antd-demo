@@ -1,8 +1,14 @@
 import React, { Component } from 'react'
 
-import { Card, Table, Tag } from 'antd'
+import { 
+  Card,
+  Table,
+  Tag,
+  Button
+} from 'antd'
 
 
+import ButtonGroup from 'antd/lib/button/button-group'
 import { getArticles } from '../../requests'
 // 引入第三方时间日期格式化
 import moment from 'moment'
@@ -23,11 +29,13 @@ export default class ArticleList extends Component {
     this.state = {
       dataSource:[],
       columns : [],
-      total: 0
+      total: 0,
+      isLoading: false
     }
   }
   createColums = (columnKeys) => {
-    return columnKeys.map(item => {
+    
+    const columns = columnKeys.map(item => {
       if( item === 'amount') {
         return {
           title: titleDisplayMap[item],
@@ -60,9 +68,29 @@ export default class ArticleList extends Component {
       key: item
     }
   })
+  columns.push(
+    {
+      title: '操作',
+      key: 'actions',
+      render () {
+        return (
+          <ButtonGroup>
+            <Button size='small' type='primary'>编辑</Button>
+            <Button size='small' type='danger'>删除</Button>
+          </ButtonGroup>
+           
+          )
+      }
+    }
+
+  ) 
+  return columns
 }
   // 发送ajax 请求数据
   getData = () => {
+    this.setState({
+      isLoading: true
+    })
     getArticles()
     .then(rep => {
       // Object.keys 返回一个所有元素为字符串的数组，
@@ -82,6 +110,14 @@ export default class ArticleList extends Component {
         columns
       })
     })
+    .catch(err =>{
+      // 处理错误 ，虽然有全局处理
+    })
+    .finally(() => {
+      this.setState({
+        isLoading:false
+      })
+    })
   }
 
 
@@ -96,6 +132,7 @@ export default class ArticleList extends Component {
              extra={<button type="primary">导出Excel</button>}
              >
             <Table 
+                loading={this.state.isLoading}
                 rowKey={record => record.id}
                 dataSource={this.state.dataSource}
                 columns={this.state.columns}
