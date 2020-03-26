@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { message } from 'antd'
+//  process.env.NODE_ENV     webpack中的   是否为开发模式
 const isDev = process.env.NODE_ENV === 'development'
 console.log(isDev)
 const service = axios.create({

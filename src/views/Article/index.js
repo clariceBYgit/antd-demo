@@ -7,6 +7,8 @@ import {
   Button
 } from 'antd'
 
+// 引入 xlsx 
+import XLSX from 'xlsx'
 
 import ButtonGroup from 'antd/lib/button/button-group'
 import { getArticles } from '../../requests'
@@ -30,7 +32,9 @@ export default class ArticleList extends Component {
       dataSource:[],
       columns : [],
       total: 0,
-      isLoading: false
+      isLoading: false,
+      offset: 0,
+      limited: 10
     }
   }
   createColums = (columnKeys) => {
@@ -72,7 +76,7 @@ export default class ArticleList extends Component {
     {
       title: '操作',
       key: 'actions',
-      render () {
+      render: ()=> {
         return (
           <ButtonGroup>
             <Button size='small' type='primary'>编辑</Button>
@@ -91,7 +95,7 @@ export default class ArticleList extends Component {
     this.setState({
       isLoading: true
     })
-    getArticles()
+    getArticles(this.state.offset, this.state.limited)
     .then(rep => {
       // Object.keys 返回一个所有元素为字符串的数组，
       /*
@@ -120,8 +124,60 @@ export default class ArticleList extends Component {
     })
   }
 
+  onPageChange = (page, pageSize)=> {
+    // console.log(page,pageSize)
+    this.setState({ 
+      offset: pageSize*(page - 1),
+      limited:pageSize
+  },() => {
+    this.getData()
+  })
+  }
 
-  componentDidMount () {
+  onShowSizeChange = (current, size) => {
+    // 注意：当做此分页时 沟通好是跳转回第一页还是留在当前页
+    // console.log(current, size)
+    this.setState({ 
+      offset: 0,
+      limited: size
+  },() => {
+    this.getData()
+  })
+  }
+
+
+  // 导出Excel表格
+  // 前端导出Excel的局限
+  // 由于是分页显示 因此  表格不完整只有当前页的（一般情况下导出Excel是由前端发送ajax请求，后端返回一个下载地址）
+  toExcel = () => {
+    // console.log('hhhh')
+      /* convert state to workbook */
+      // 组合数据
+      const data = [Object.keys(this.state.dataSource[0])]  //[['id', 'title' ,'author','amount','createAt']]
+      for (let i = 0 ; i < this.state.dataSource.length; i++){
+        // 涉及到对象转数组
+        // data.push(Object.values(this.state.dataSource[i]))   缺陷不易处理时间
+        data.push([
+          this.state.dataSource[i].id,
+          this.state.dataSource[i].title,
+          this.state.dataSource[i].author,
+          this.state.dataSource[i].amount,
+          moment(this.state.dataSource[i].createAt).format('YYYY年MM月DD日hh时mm分ss秒')
+          
+        ])
+
+
+      }
+      console.log(data)
+      // 数据类型是[["a","b"],[1,2]]   二维数组
+      const ws = XLSX.utils.aoa_to_sheet(data); 
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "SheetJS");
+      /* generate XLSX file and send to client */
+      // 结合时间,页码修改文件名
+      XLSX.writeFile(wb, `articles-第${this.state.offset / this.state.limited + 1}页-${moment().format('YYYY年MM月DD日hh时mm分ss秒')}.xlsx`)
+  }
+  componentDidMount () { 
     this.getData()
   }
     render() {
@@ -129,7 +185,7 @@ export default class ArticleList extends Component {
             <Card
              title="文章列表" 
              bordered={false}
-             extra={<button type="primary">导出Excel</button>}
+             extra={<button onClick={this.toExcel} type="primary">导出Excel</button>}
              >
             <Table 
                 loading={this.state.isLoading}
@@ -137,8 +193,17 @@ export default class ArticleList extends Component {
                 dataSource={this.state.dataSource}
                 columns={this.state.columns}
                 pagination={{
+                  // 记录当前是第几页
+                  current: this.state.offset / this.state.limited +1 ,
                   total:this.state.total,
-                  hideOnSinglePage: true
+                  hideOnSinglePage: true,
+                  // 是否可改变pageSize 
+                  showSizeChanger:true,
+                  // 是否可以快速跳转页
+                  showQuickJumper:true,
+                  onChange: this.onPageChange,
+                  onShowSizeChange: this.onShowSizeChange,
+                  pageSizeOptions:['10','15','20','25','30']
                 }}
             />
           </Card>
