@@ -18,7 +18,7 @@ service.interceptors.request.use((config) => {
 })
 
 service.interceptors.response.use((rep) => {
-    console.log(rep)
+    // console.log(rep)
     if (rep.data.code === 200){
         
         return rep.data.data
@@ -29,9 +29,17 @@ service.interceptors.response.use((rep) => {
     }
 })
 
+
+// 获取文章列表
 export const getArticles = ( offset = 0, limited = 10) => {
     return  service.post('/antd/articleList', {
         offset,
         limited
     })
+}
+
+
+// 通过id删除文章
+export const deleteArticleById = (id) => {
+    return service.post(`/antd/articleDelete/${id}`)
 }

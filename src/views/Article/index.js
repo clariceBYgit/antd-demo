@@ -4,14 +4,17 @@ import {
   Card,
   Table,
   Tag,
-  Button
+  Button,
+  Modal,
+  Typography,
+  message
 } from 'antd'
 
 // 引入 xlsx 
 import XLSX from 'xlsx'
 
 import ButtonGroup from 'antd/lib/button/button-group'
-import { getArticles } from '../../requests'
+import { getArticles, deleteArticleById } from '../../requests'
 // 引入第三方时间日期格式化
 import moment from 'moment'
   // 调试时
@@ -29,12 +32,16 @@ export default class ArticleList extends Component {
   constructor () {
     super()
     this.state = {
-      dataSource:[],
+      dataSource: [],
       columns : [],
       total: 0,
       isLoading: false,
       offset: 0,
-      limited: 10
+      limited: 10,
+      deleteArticleTitle: '',
+      isShowArticleModal: false,
+      deleteArticleConfirmLoading: false,
+      deleteArticleID: null
     }
   }
   createColums = (columnKeys) => {
@@ -76,11 +83,11 @@ export default class ArticleList extends Component {
     {
       title: '操作',
       key: 'actions',
-      render: ()=> {
+      render: (text, record)=> {
         return (
           <ButtonGroup>
             <Button size='small' type='primary'>编辑</Button>
-            <Button size='small' type='danger'>删除</Button>
+            <Button size='small' type='danger' onClick={this.showDeleteArticle.bind(this, record)}>删除</Button>
           </ButtonGroup>
            
           )
@@ -90,6 +97,73 @@ export default class ArticleList extends Component {
   ) 
   return columns
 }
+
+
+  showDeleteArticle = (record) => {
+    // console.log(record)
+    // Typography排版  文本的基本格式
+
+    // 采用方法的形式调用modal  定制化不强
+
+   /* Modal.confirm({
+      title:'此操作不可逆，请谨慎！！' ,
+      content:<Typography>确定要删除<span style={{color:'#f00'}}>{record.title}</span>吗?</Typography>,
+      okText:'别墨迹，赶紧删除',
+      cancelText:'亲，留下我！',
+      onOk() {
+        deleteArticle(record.id)
+          .then(res => {
+            console.log(res)
+          })
+      }
+    })
+  */ 
+        
+      this.setState({
+        isShowArticleModal: true,
+        deleteArticleTitle: record.title,
+        deleteArticleID: record.id
+      })
+
+    } 
+    
+  // 删除数据
+  deleteArticle = (id) => {
+    console.log(this.state.deleteArticleID)
+    this.setState({
+      deleteArticleConfirmLoading: true
+    })
+    deleteArticleById(this.state.deleteArticleID)
+      .then(res => {
+        message.success(res.msg)
+        // 重新请求数据，沟通是否返回数据第一页或者当前页
+        this.setState({
+          offset: 0
+        }, () => {
+          // 回调中去发送请求
+          this.getData()
+        })
+      })
+      .finally( () => {
+        this.setState({
+          deleteArticleConfirmLoading: false,
+          isShowArticleModal: false
+        })
+      })
+  }
+
+
+    // 点击取消，叉叉
+    hideDeleteModal = () => {
+      this.setState({
+        isShowArticleModal:false,
+        deleteArticleTitle: '',
+        deleteArticleConfirmLoading:false
+      })
+    }
+
+
+
   // 发送ajax 请求数据
   getData = () => {
     this.setState({
@@ -206,6 +280,19 @@ export default class ArticleList extends Component {
                   pageSizeOptions:['10','15','20','25','30']
                 }}
             />
+            <Modal
+              title='此操作不可逆，请谨慎！！'
+              visible={this.state.isShowArticleModal}
+              onCancel={this.hideDeleteModal}
+              confirmLoading={this.state.deleteArticleConfirmLoading}
+              // 点击蒙层是否关闭
+              maskClosable={false}
+              onOk={this.deleteArticle}
+            >
+              <Typography>
+                确定要删除<span style={{color:'#f00'}}>{this.state.deleteArticleTitle}</span>吗?
+                </Typography>
+            </Modal>
           </Card>
         )
     }
