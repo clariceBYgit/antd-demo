@@ -7,8 +7,10 @@ import {
   Button,
   Modal,
   Typography,
-  message
+  message,
+  Tooltip
 } from 'antd'
+
 
 // 引入 xlsx 
 import XLSX from 'xlsx'
@@ -24,12 +26,13 @@ const titleDisplayMap = {
   id: 'id',
   title: '标题',
   author: '作者',
-  createAt: '创建时间',
+  createAt: '创建时间', 
   amount: '阅读量'
 }
+
 export default class ArticleList extends Component {
   // 定义数据
-  constructor () {
+  constructor () { 
     super()
     this.state = {
       dataSource: [],
@@ -44,6 +47,7 @@ export default class ArticleList extends Component {
       deleteArticleID: null
     }
   }
+
   createColums = (columnKeys) => {
     
     const columns = columnKeys.map(item => {
@@ -54,8 +58,15 @@ export default class ArticleList extends Component {
           render : (text, record) => {
             // 这里是根据数字的大小做一个条件渲染
               // 同理  可以根据职位不同显示不同的颜色
-            const { amount } =record
-          return <Tag color={ amount > 230 ? 'red' : 'green'}>{record.amount}</Tag>
+            const { amount } = record
+          return (
+            // Tooltip  文字提示
+              <Tooltip title={ amount > 230 ? '超过230' : '没有超过230' }>
+
+                <Tag color={ amount > 230 ? 'red' : 'green' }>{record.amount}</Tag>
+
+              </Tooltip>
+           ) 
           }
         }
        
@@ -86,7 +97,7 @@ export default class ArticleList extends Component {
       render: (text, record)=> {
         return (
           <ButtonGroup>
-            <Button size='small' type='primary'>编辑</Button>
+            <Button size='small' type='primary' onClick={this.toEdit.bind(this, record.id)}>编辑</Button>
             <Button size='small' type='danger' onClick={this.showDeleteArticle.bind(this, record)}>删除</Button>
           </ButtonGroup>
            
@@ -97,7 +108,19 @@ export default class ArticleList extends Component {
   ) 
   return columns
 }
+  // 文章编辑
+  toEdit = (id) => {
+    // console.log(this.props)
 
+    this.props.history.push({
+      pathname: `/admin/article/edit/${id}`
+      // // 路由隐式传参
+      // state: {
+      //   title: record.title
+      // }
+
+    })
+  }
 
   showDeleteArticle = (record) => {
     // console.log(record)
@@ -129,7 +152,7 @@ export default class ArticleList extends Component {
     
   // 删除数据
   deleteArticle = (id) => {
-    console.log(this.state.deleteArticleID)
+    // console.log(this.state.deleteArticleID)
     this.setState({
       deleteArticleConfirmLoading: true
     })
@@ -170,7 +193,7 @@ export default class ArticleList extends Component {
       isLoading: true
     })
     getArticles(this.state.offset, this.state.limited)
-    .then(rep => {
+      .then(rep => {
       // Object.keys 返回一个所有元素为字符串的数组，
       /*
         var arr = ['a', 'b', 'c'];
@@ -180,13 +203,13 @@ export default class ArticleList extends Component {
           var obj = { 0: 'a', 1: 'b', 2: 'c' };
         console.log(Object.keys(obj)); // console: ['0', '1', '2']
       */
-      const columnKeys = Object.keys(rep.list[0])
-     const columns = this.createColums(columnKeys)
-      this.setState({
-        total:rep.total,
-        dataSource: rep.list,
-        columns
-      })
+        const columnKeys = Object.keys(rep.list[0])
+        const columns = this.createColums(columnKeys)
+        this.setState({
+          total:rep.total,
+          dataSource: rep.list,
+          columns
+        })
     })
     .catch(err =>{
       // 处理错误 ，虽然有全局处理
@@ -297,3 +320,5 @@ export default class ArticleList extends Component {
         )
     }
 }
+
+

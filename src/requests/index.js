@@ -41,5 +41,19 @@ export const getArticles = ( offset = 0, limited = 10) => {
 
 // 通过id删除文章
 export const deleteArticleById = (id) => {
+    // 两种传参方式
+    // return service.post(`/antd/articleDelete/`,{
+    //     id
+    // })
     return service.post(`/antd/articleDelete/${id}`)
+}
+
+// 通过id获取文章
+export const getArticleById =  (id) => {
+    return service.post(`/antd/getarticle/${id}`)
+}
+
+// 保存文章
+export const saveArticle =  ( id, data ) => {
+   return service.post(`/antd/articleEdit/${id}`, data)
 }

@@ -14,9 +14,9 @@ const Loadable = ({
         componentDidMount() {
             // loader()  实际上执行这句话  import('./Dashboard'),
             loader()
-                .then(rep => {
+                .then(res => {
                     this.setState({
-                        LoadedComponent: rep.default
+                        LoadedComponent: res.default
                     })
                 })
         }

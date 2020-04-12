@@ -1,9 +1,9 @@
-
+ 
 // 引入Loadable
-// import Loadable from 'react-loadable'
+import Loadable from 'react-loadable'
 
 // Loadbale原理  详见 loadable.js
-import Loadable from './loadable'
+// import Loadable from './loadable'
 
 import { Loading } from '../components'
 

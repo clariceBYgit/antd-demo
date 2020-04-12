@@ -13,7 +13,6 @@ import {
 import { 
     DashboardOutlined, 
     UnorderedListOutlined, 
-    FormOutlined, 
     SettingOutlined 
 } from '@ant-design/icons'
 
@@ -37,16 +36,14 @@ export const adminRoutes = [{
 },{
     pathname: '/admin/article',
     component: ArticleList,
-    exact:true,
     title: '文章管理',
     icon:UnorderedListOutlined,
+    exact:true, 
     isNav: true
 },{
     pathname: '/admin/article/edit/:id',
     component: ArticleEdit,
-    // title: '文章编辑',
-    // icon:FormOutlined,
-    // isNav: true
+    
 },{
     pathname: '/admin/settings',
     component: Settings,
