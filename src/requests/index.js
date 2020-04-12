@@ -57,3 +57,9 @@ export const getArticleById =  (id) => {
 export const saveArticle =  ( id, data ) => {
    return service.post(`/antd/articleEdit/${id}`, data)
 }
+
+// 获取文章浏览量
+
+export const getArticleAmount = () => {
+    return service.post('/antd/articleAmount')
+}
