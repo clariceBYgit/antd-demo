@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 
+import { Provider } from 'react-redux'
 // 引入antd中文
 import zhCN from 'antd/es/locale/zh_CN';
 import { ConfigProvider } from 'antd'
@@ -14,7 +15,11 @@ import { mainRoutes } from './routes'
 import './index.less'
 
 
+// redux
+import store from './store'
+
 ReactDOM.render(
+  <Provider store={store}>
     <ConfigProvider locale={zhCN}>
       {/* locale={zhCN} 设置国际化语言 */}
       <Router>
@@ -34,6 +39,7 @@ ReactDOM.render(
           </Switch>
       </Router>
     </ConfigProvider>
+  </Provider>
 ,
  document.getElementById('root')
 );

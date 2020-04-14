@@ -5,12 +5,12 @@ import { adminRoutes } from './routes'
 
 import { Frame } from './components'
 
-import {
-    Button,
-    Spin,
-    Pagination,
-    Badge
-} from 'antd' 
+// import {
+//     Button,
+//     Spin,
+//     Pagination,
+//     Badge
+// } from 'antd' 
 
 const menus = adminRoutes.filter(route => route.isNav === true)
 

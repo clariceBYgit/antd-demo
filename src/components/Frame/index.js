@@ -1,33 +1,71 @@
 import React, { Component } from 'react'
-import { Layout, Menu, Icon } from 'antd'
+import { Layout, Menu, Icon, Dropdown, Avatar, Badge} from 'antd'
 // 从4.0开始，antd不在内置icon组件，需要使用独立的包 @ant-design/icons
 // 下载      npm i @ant-design/icons
 // import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons'
+import { DownOutlined } from '@ant-design/icons';
 
-
+import { getNotificationsList } from '../../actions/notifications'
 
 
 // 引入自定义的less
 import './frame.less'
 // 引入自己创的logo
 import logo from './logo.png'
+import qian from './qian.jpg'
+// import dog from './dog.jpg'
 
 import { withRouter } from 'react-router-dom'
+
+import { connect} from 'react-redux'
 
 
 const { Header, Content, Sider } = Layout
 
+
+const mapState = state => {
+  return {
+    notificationsCount: state.notifications.list.filter( item => item.hasRead === false).length
+  }
+}
+
 // 装饰器模式
 @withRouter
+@connect(mapState, { getNotificationsList })
 
 class Frame extends Component {
+
+  componentDidMount () {
+    this.props.getNotificationsList()
+  }
+
 
   onMenuClick = ({ key }) => {
     this.props.history.push(key)
   }
-
+  onDropdownMenuClick = ({key}) => {
+    // console.log({key})
+    this.props.history.push(key)
+  }
+  
+  renderDropDodn = () => (
+      <Menu onClick={this.onDropdownMenuClick}>
+        <Menu.Item key="/admin/notifications">
+          <Badge dot={Boolean(this.props.notificationsCount)}>
+              通知中心
+          </Badge>
+        </Menu.Item>
+        <Menu.Item key="/admin/settings">
+            个人设置
+        </Menu.Item>
+        <Menu.Item key="/login">
+           退出登录
+        </Menu.Item>
+      </Menu>
+    )
+  
     render() {
-        // console.log(this.props.children)
+        // console.log(this.props)
         // 菜单栏的高亮设置
         const selectedKeyArr = this.props.location.pathname.split('/')
         
@@ -41,6 +79,18 @@ class Frame extends Component {
           <Header className="header qx-header">
             <div className="qx-logo">
               <img src={logo} alt="qinaxi" />
+            </div>
+            <div style={{display:'flex',alignItems:"center"}}>
+              <Dropdown overlay={this.renderDropDodn()} trigger={['click']}>
+
+                <div onClick={e => e.preventDefault()}>
+                <Badge count={this.props.notificationsCount} offset={[-10,-5]}>
+                  <Avatar src={qian} />
+                  欢迎您！千千 
+                </Badge>
+                  <DownOutlined />
+                </div>
+              </Dropdown>
             </div>
           </Header>
           <Layout>

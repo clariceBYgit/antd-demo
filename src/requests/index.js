@@ -2,7 +2,7 @@ import axios from 'axios'
 import { message } from 'antd'
 //  process.env.NODE_ENV     webpack中的   是否为开发模式
 const isDev = process.env.NODE_ENV === 'development'
-console.log(isDev)
+// console.log(isDev)
 const service = axios.create({
     baseURL: isDev ? 'http://rap2.taobao.org:38080/app/mock/247090' : ''
 })
@@ -62,4 +62,10 @@ export const saveArticle =  ( id, data ) => {
 
 export const getArticleAmount = () => {
     return service.post('/antd/articleAmount')
+}
+
+
+// 获取通知列表  
+export const getNotifications = () => {
+    return  service.post('/antd/notifications')
 }
