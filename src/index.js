@@ -25,10 +25,7 @@ ReactDOM.render(
       <Router>
       {/* // prefixCls  设置统一样式的前缀 */}
           <Switch>
-            <Route path="/admin" render={(routerProps) => {
-              // TOOD:权限，需要登录才能访问/admin
-              return <App {...routerProps} />
-            }} />
+            <Route path="/admin" component={App} />
             {
               mainRoutes.map(route => {
                 return <Route key={route.pathname} path={route.pathname} component={route.component} />

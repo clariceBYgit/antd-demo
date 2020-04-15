@@ -6,7 +6,8 @@ import{
     Input,
     Button,
     Checkbox,
-    Card
+    Card,
+    Spin
 } from 'antd'
 
 import { UserOutlined, LockOutlined} from '@ant-design/icons'
@@ -14,9 +15,19 @@ import { UserOutlined, LockOutlined} from '@ant-design/icons'
 
 import './login.less'
 
+import { connect } from 'react-redux'
+import { login } from '../../actions/user'
+import { Redirect } from 'react-router-dom'
 
+const mapState = state => ({
+    isLogin: state.user.isLogin,
+    isLoading: state.user.isLoading
+})
 
 @Form.create()
+
+@connect(mapState, { login })
+
 class Login extends Component {
    
     
@@ -25,7 +36,11 @@ class Login extends Component {
         e.preventDefault();
         this.props.form.validateFields( (err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                // console.log('Received values of form: ', values);
+                this.props.login(values)
+                    .then(res => {
+                        console.log(res)
+                    })
             }
         })
     }   
@@ -33,9 +48,16 @@ class Login extends Component {
        const { getFieldDecorator } = this.props.form
 
         return (
+            this.props.isLogin 
+            
+            ?
+
+            <Redirect to='/admin' />
+            :
             <Card title='QX ADMIN登录'
                 className="qx-login-wrapper"
             >
+            <Spin spinning={this.props.isLoading} size="large">
                 <Form
                     className="login-form"
                     onSubmit={this.handleSubmit}
@@ -81,9 +103,10 @@ class Login extends Component {
                         
                     </Form.Item>
 
-                  
                 </Form>
+            </Spin>
             </Card>
+            
         )
     }
 }

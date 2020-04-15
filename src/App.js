@@ -4,6 +4,8 @@ import { Route, Switch,Redirect } from 'react-router-dom'
 import { adminRoutes } from './routes'
 
 import { Frame } from './components'
+import { connect } from 'react-redux'
+
 
 // import {
 //     Button,
@@ -13,6 +15,13 @@ import { Frame } from './components'
 // } from 'antd' 
 
 const menus = adminRoutes.filter(route => route.isNav === true)
+
+const mapState = state => ({
+  isLogin: state.user.isLogin
+})
+
+
+@connect(mapState)
 
 // // 配置装饰器  
 // const testHOC = (WrappedComponent) => {
@@ -33,7 +42,11 @@ const menus = adminRoutes.filter(route => route.isNav === true)
 
 class App extends Component{
   render (){
+   
     return (
+      
+// 判断是否登录
+    this.props.isLogin ? 
     //   <div>
     //   {/* 所生成的对应的标签都有自带的  ant class属性 */}
     //    <Button loading type="primary">antd按钮</Button>
@@ -56,6 +69,7 @@ class App extends Component{
     
     
     // </div>
+    
     <Frame menus={menus}>
       <Switch>
         {
@@ -76,6 +90,8 @@ class App extends Component{
         <Redirect to='/404' />
       </Switch>
     </Frame>
+    :
+    <Redirect to='/login' />
     )
     
   }

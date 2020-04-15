@@ -69,3 +69,9 @@ export const getArticleAmount = () => {
 export const getNotifications = () => {
     return  service.post('/antd/notifications')
 }
+
+
+// 登录
+export const loginRequest= (userInfo) => {
+    return axios.post('http://rap2.taobao.org:38080/app/mock/247090/antd/login', userInfo)
+}
