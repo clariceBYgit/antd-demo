@@ -1,3 +1,5 @@
+// combineReducers  用于对多个reducers进行合并
+
 import { combineReducers } from 'redux'
 
 import notifications from './notifications'

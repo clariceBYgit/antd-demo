@@ -6,13 +6,14 @@ import { Layout, Menu, Icon, Dropdown, Avatar, Badge} from 'antd'
 import { DownOutlined } from '@ant-design/icons';
 
 import { getNotificationsList } from '../../actions/notifications'
+import { logout } from '../../actions/user'
 
 
 // 引入自定义的less
 import './frame.less'
 // 引入自己创的logo
 import logo from './logo.png'
-import qian from './qian.jpg'
+// import qian from './qian.jpg'
 // import dog from './dog.jpg'
 
 import { withRouter } from 'react-router-dom'
@@ -25,30 +26,39 @@ const { Header, Content, Sider } = Layout
 
 const mapState = state => {
   return {
-    notificationsCount: state.notifications.list.filter( item => item.hasRead === false).length
+    notificationsCount: state.notifications.list.filter( item => item.hasRead === false).length,
+    avatar:state.user.avatar,
+    displayName:state.user.displayName
   }
 }
 
 // 装饰器模式
 @withRouter
-@connect(mapState, { getNotificationsList })
+@connect(mapState, { getNotificationsList, logout})
 
 class Frame extends Component {
 
   componentDidMount () {
-    this.props.getNotificationsList()
+    this.props.getNotificationsList() 
   }
 
 
   onMenuClick = ({ key }) => {
-    this.props.history.push(key)
+
+      this.props.history.push(key)
   }
   onDropdownMenuClick = ({key}) => {
+    if ( key ==='/logout') {
+      this.props.logout()
+    } else {
+
+      this.props.history.push(key)
+    }
+
     // console.log({key})
-    this.props.history.push(key)
   }
   
-  renderDropDodn = () => (
+  renderDropDown = () => (
       <Menu onClick={this.onDropdownMenuClick}>
         <Menu.Item key="/admin/notifications">
           <Badge dot={Boolean(this.props.notificationsCount)}>
@@ -58,7 +68,7 @@ class Frame extends Component {
         <Menu.Item key="/admin/settings">
             个人设置
         </Menu.Item>
-        <Menu.Item key="/login">
+        <Menu.Item key="/logout">
            退出登录
         </Menu.Item>
       </Menu>
@@ -81,12 +91,12 @@ class Frame extends Component {
               <img src={logo} alt="qinaxi" />
             </div>
             <div style={{display:'flex',alignItems:"center"}}>
-              <Dropdown overlay={this.renderDropDodn()} trigger={['click']}>
+              <Dropdown overlay={this.renderDropDown()} trigger={['click']}>
 
                 <div onClick={e => e.preventDefault()}>
                 <Badge count={this.props.notificationsCount} offset={[-10,-5]}>
-                  <Avatar src={qian} />
-                  欢迎您！千千 
+                  <Avatar src={this.props.avatar} />
+                 <span> 欢迎您！{this.props.displayName}</span>
                 </Badge>
                   <DownOutlined />
                 </div>
