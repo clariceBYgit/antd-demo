@@ -45,6 +45,10 @@ const NoAuth = Loadable({
     loader: () => import('./NoAuth'),
     loading: Loading
 })
+const Profile = Loadable({
+    loader: () => import('./Profile'),
+    loading: Loading
+})
 
 const ArticleList = Loadable({
     loader: () => import('./Article'),
@@ -65,5 +69,6 @@ export {
     ArticleList,
     ArticleEdit,
     Notifications,
-    NoAuth
+    NoAuth,
+    Profile
 } 

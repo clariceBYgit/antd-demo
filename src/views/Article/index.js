@@ -184,8 +184,12 @@ export default class ArticleList extends Component {
         deleteArticleConfirmLoading:false
       })
     }
+// 为防止因快速点击而导致数据未发送回来的切换报错    重写setState方法
 
-
+  setData = (state) => {
+    if (!this.updater.isMounted(this)) return
+    this.setState(state)
+  }
 
   // 发送ajax 请求数据
   getData = () => {
@@ -205,19 +209,22 @@ export default class ArticleList extends Component {
       */
         const columnKeys = Object.keys(rep.list[0])
         const columns = this.createColums(columnKeys)
-        this.setState({
+        // 若请求完成之后组件已经销毁，就不需要再设置setState
+        // if (!this.updater.isMounted(this)) return
+
+        this.setData({
           total:rep.total,
           dataSource: rep.list,
           columns
         })
-    })
-    .catch(err =>{
-      // 处理错误 ，虽然有全局处理
-    })
-    .finally(() => {
-      this.setState({
-        isLoading:false
       })
+      .catch(err =>{
+        // 处理错误 ，虽然有全局处理
+      })
+      .finally(() => {
+        this.setData({
+          isLoading:false
+        })
     })
   }
 
@@ -275,8 +282,13 @@ export default class ArticleList extends Component {
       XLSX.writeFile(wb, `articles-第${this.state.offset / this.state.limited + 1}页-${moment().format('YYYY年MM月DD日hh时mm分ss秒')}.xlsx`)
   }
   componentDidMount () { 
+    // console.log(this.updater.isMounted(this))
     this.getData()
   }
+
+  // componentWillUnmount() {
+  //   console.log(this.updater.isMounted(this))
+  // }
     render() {
         return (
             <Card
