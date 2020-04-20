@@ -5,7 +5,8 @@ import {
     Settings,
     ArticleList,
     ArticleEdit,
-    Notifications
+    Notifications,
+    NoAuth
 } from '../views'
 
 
@@ -28,33 +29,46 @@ export const mainRoutes = [{
 }
 ]
 
+
+
 export const adminRoutes = [{
     pathname: '/admin/dashboard',
     component: Dashboard,
     title: '仪表盘',
     icon:DashboardOutlined,
-    isNav: true
+    isNav: true,
+    // 角色权限 假定
+    // 我是大傻逼 大大的傻逼
+    roles: ['001', '002', '003']
 },{
     pathname: '/admin/article',
     component: ArticleList,
     title: '文章管理',
     icon:UnorderedListOutlined,
     exact:true, 
-    isNav: true
+    isNav: true,
+    roles: ['001', '002']
 },{
     pathname: '/admin/article/edit/:id',
     component: ArticleEdit,
+    roles: ['001','002']
     
 },{
     pathname: '/admin/notifications',
     component: Notifications,
+    roles: ['001', '002', '003']
     
+},{
+    pathname:'/admin/noauth',
+    component: NoAuth,
+    roles: ['001', '002', '003']
 },
 {
     pathname: '/admin/settings',
     component: Settings,
     title: '设置',
     icon:SettingOutlined,
-    isNav: true
+    isNav: true,
+    roles: ['001']
 }
 ]

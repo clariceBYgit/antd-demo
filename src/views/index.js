@@ -41,7 +41,10 @@ const Notifications = Loadable({
     loading: Loading
 })
 
-
+const NoAuth = Loadable({
+    loader: () => import('./NoAuth'),
+    loading: Loading
+})
 
 const ArticleList = Loadable({
     loader: () => import('./Article'),
@@ -61,5 +64,6 @@ export {
     Settings,
     ArticleList,
     ArticleEdit,
-    Notifications
+    Notifications,
+    NoAuth
 } 

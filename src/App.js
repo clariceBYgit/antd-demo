@@ -17,7 +17,8 @@ import { connect } from 'react-redux'
 const menus = adminRoutes.filter(route => route.isNav === true)
 
 const mapState = state => ({
-  isLogin: state.user.isLogin
+  isLogin: state.user.isLogin,
+  role: state.user.role
 })
 
 
@@ -80,7 +81,11 @@ class App extends Component{
                 path={route.pathname}
                 exact={route.exact}
                 render={(routerProps) => {
-                  return <route.component {...routerProps} />
+                  const hasPermission = route.roles.includes(this.props.role)
+                  return hasPermission ? 
+                 <route.component {...routerProps} />
+                 :
+                 <Redirect to='/admin/noauth' />
                 }}
               />
             )
