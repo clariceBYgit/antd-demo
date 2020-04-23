@@ -39,7 +39,6 @@ export const adminRoutes = [{
     icon:DashboardOutlined,
     isNav: true,
     // 角色权限 假定
-    // 我是大傻逼 大大的傻逼
     roles: ['001', '002', '003']
 },{
     pathname: '/admin/article',
