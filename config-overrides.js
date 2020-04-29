@@ -23,6 +23,7 @@ module.exports = override(
         style: true
     }),
     addDecoratorsLegacy(),
+    //    配置装饰器
     // addLessLoader({
     //    javascriptEnabled: true,
     // //    配置主题颜色
@@ -35,6 +36,5 @@ module.exports = override(
      //    配置主题颜色
          modifyVars: theme
       }),
-    //    配置装饰器
 
 )
