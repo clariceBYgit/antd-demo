@@ -29,9 +29,9 @@ const mapState = state => ({
 @connect(mapState, { login })
 
 class Login extends Component {
-   
-    
+  
 
+    
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields( (err, values) => {
