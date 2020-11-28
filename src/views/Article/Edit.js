@@ -50,6 +50,7 @@ class Edit extends Component {
   }
   // 提交信息
   handleSubmit = (e) => {
+    // 阻止默认行为
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
