@@ -12,7 +12,7 @@ import './dashboard.less'
 
 import { getArticleAmount } from '../../requests'
 // echarts依旧要结合dom操作  因此 需要引入 createRef
-import echarts from 'echarts'
+// import echarts from 'echarts'
 // console.log(eacherts)
 export default class Dashboard extends Component {
     constructor () {
@@ -21,7 +21,7 @@ export default class Dashboard extends Component {
     }
     // echarts的使用
     initArticleEchart = () => {
-        this.articleEchart = echarts.init(this.articleAmount.current)
+        // this.articleEchart = echarts.init(this.articleAmount.current)
 
         getArticleAmount()
             .then(res => {

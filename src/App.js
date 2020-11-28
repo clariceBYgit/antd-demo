@@ -48,29 +48,6 @@ class App extends Component{
       
 // 判断是否登录
     this.props.isLogin ? 
-    //   <div>
-    //   {/* 所生成的对应的标签都有自带的  ant class属性 */}
-    //    <Button loading type="primary">antd按钮</Button>
-    //    {/* <Spin>
-    //        <div>
-    //            fuaouo uupad uuoafhj ouadu oaodu ooau oa  uj
-    //        </div>
-    //    </Spin>
-    //    <Pagination
-    //   showSizeChanger
-    //   defaultCurrent={3}
-    //   total={500}
-    // />
-    //   <Badge count={10} showZero overflowCount={9}>
-    //     <div>
-    //     Lorem 
-    //     </div>
-    //   </Badge> */}
-    //  <div>这里是公共的部分</div> 
-    
-    
-    // </div>
-    
     <Frame menus={menus}>
       <Switch>
         {

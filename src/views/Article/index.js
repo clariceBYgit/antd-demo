@@ -47,9 +47,8 @@ export default class ArticleList extends Component {
       deleteArticleID: null
     }
   }
-
+// 创建table的中文columns的方法
   createColums = (columnKeys) => {
-    
     const columns = columnKeys.map(item => {
       if( item === 'amount') {
         return {
@@ -63,7 +62,7 @@ export default class ArticleList extends Component {
             // Tooltip  文字提示
               <Tooltip title={ amount > 230 ? '超过230' : '没有超过230' }>
 
-                <Tag color={ amount > 230 ? 'red' : 'green' }>{record.amount}</Tag>
+                <Tag color={ amount > 230 ? 'red' : 'green' }>{amount}</Tag>
 
               </Tooltip>
            ) 
@@ -84,6 +83,21 @@ export default class ArticleList extends Component {
       }
      
   }
+  /*
+  
+    antd中table columns的格式
+    const columns = [{
+                      title: '姓名',
+                      dataIndex: 'name',
+                      key: 'name',
+                    }]
+
+    antd中table dataSource的格式
+    const dataSource = [{
+                      key: '1',
+                      name: '胡彦斌',
+                    }]
+  */
     return {
       title: titleDisplayMap[item],
       dataIndex: item,
@@ -94,6 +108,7 @@ export default class ArticleList extends Component {
     {
       title: '操作',
       key: 'actions',
+      // record 就是当前的元素
       render: (text, record)=> {
         return (
           <ButtonGroup>
@@ -151,7 +166,7 @@ export default class ArticleList extends Component {
     } 
     
   // 删除数据
-  deleteArticle = (id) => {
+  deleteArticle = () => {
     // console.log(this.state.deleteArticleID)
     this.setState({
       deleteArticleConfirmLoading: true
@@ -197,7 +212,7 @@ export default class ArticleList extends Component {
       isLoading: true
     })
     getArticles(this.state.offset, this.state.limited)
-      .then(rep => {
+      .then(resp => {
       // Object.keys 返回一个所有元素为字符串的数组，
       /*
         var arr = ['a', 'b', 'c'];
@@ -207,14 +222,14 @@ export default class ArticleList extends Component {
           var obj = { 0: 'a', 1: 'b', 2: 'c' };
         console.log(Object.keys(obj)); // console: ['0', '1', '2']
       */
-        const columnKeys = Object.keys(rep.list[0])
+        const columnKeys = Object.keys(resp.list[0]) // ["id", "title", "author", "amount", "createAt"]
         const columns = this.createColums(columnKeys)
         // 若请求完成之后组件已经销毁，就不需要再设置setState
         // if (!this.updater.isMounted(this)) return
 
         this.setData({
-          total:rep.total,
-          dataSource: rep.list,
+          total:resp.total,
+          dataSource: resp.list,
           columns
         })
       })
@@ -305,6 +320,7 @@ export default class ArticleList extends Component {
                   // 记录当前是第几页
                   current: this.state.offset / this.state.limited +1 ,
                   total:this.state.total,
+                  // 只有一页时是否隐藏分页器
                   hideOnSinglePage: true,
                   // 是否可改变pageSize 
                   showSizeChanger:true,

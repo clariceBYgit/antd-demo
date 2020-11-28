@@ -1,15 +1,18 @@
 import axios from 'axios'
+// 全局处理错误
 import { message } from 'antd'
 //  process.env.NODE_ENV     webpack中的   是否为开发模式
 const isDev = process.env.NODE_ENV === 'development'
 // console.log(isDev)
+
 const service = axios.create({
-    baseURL: isDev ? 'http://rap2.taobao.org:38080/app/mock/247090' : ''
+    baseURL: isDev ? 'http://rap2api.taobao.org/app/mock/271703' : ''
 })
 
 // 拦截器
 service.interceptors.request.use((config) => {
     // console.log(config)
+    // 为所有       请求添加 token
     config.data = Object.assign({}, config.data, {
         // authToken:window.localStorage.getItem('authToken')
         authToken:'itisauthtoken'
@@ -17,15 +20,15 @@ service.interceptors.request.use((config) => {
     return config
 })
 
-service.interceptors.response.use((rep) => {
-    // console.log(rep)
-    if (rep.data.code === 200){
+service.interceptors.response.use((resp) => {
+    // console.log(resp)
+    if (resp.data.code === 200){
         
-        return rep.data.data
+        return resp.data.data
        
     } else {
         // 全局处理错误
-        message.error(rep.data.errMsg)
+        message.error(resp.data.errMsg)
     }
 })
 

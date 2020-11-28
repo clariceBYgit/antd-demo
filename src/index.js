@@ -25,8 +25,13 @@ ReactDOM.render(
       <Router>
       {/* // prefixCls  设置统一样式的前缀 */}
           <Switch>
-            <Route path="/admin" component={App} />
+            {/* <Route path="/admin" component={App} /> */}
+            <Route path='/admin' render={(routerProps) => {
+              // todo 权限 需要登录才能访问/admin
+              return <App {...routerProps} />
+            }} />
             {
+              // mainRoutes分为 login 和 404
               mainRoutes.map(route => {
                 return <Route key={route.pathname} path={route.pathname} component={route.component} />
               })

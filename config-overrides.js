@@ -22,8 +22,8 @@ module.exports = override(
         libraryDirectory: 'es',
         style: true
     }),
-    addDecoratorsLegacy(),
     //    配置装饰器
+    addDecoratorsLegacy(),
     // addLessLoader({
     //    javascriptEnabled: true,
     // //    配置主题颜色
