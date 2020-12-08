@@ -45,7 +45,7 @@ export default class Dashboard extends Component {
                 };
 
                 // 使用刚指定的配置项和数据显示图表。
-                this.articleEchart.setOption(option);
+                // this.articleEchart.setOption(option);
             })
       
     }

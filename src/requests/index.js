@@ -53,7 +53,7 @@ export const deleteArticleById = (id) => {
 
 // 通过id获取文章
 export const getArticleById =  (id) => {
-    return service.post(`/antd/getarticle/${id}`)
+    return service.post(`/antd/article/${id}`)
 }
 
 // 保存文章
@@ -76,5 +76,5 @@ export const getNotifications = () => {
 
 // 登录
 export const loginRequest= (userInfo) => {
-    return axios.post('http://rap2.taobao.org:38080/app/mock/247090/antd/login', userInfo)
+    return axios.post('http://rap2api.taobao.org/app/mock/271703/antd/login', userInfo)
 }
