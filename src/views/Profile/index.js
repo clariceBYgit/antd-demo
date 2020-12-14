@@ -30,6 +30,7 @@ class Profile extends Component {
      // customRequest通过覆盖默认的上传行为，可以自定义自己的上传实现
     handleUploadAvatar = ( { file } ) => {
         const data = new FormData()
+        // 此处采用的是贴图库 www.tietuku.com
         data.append('Token','212273af5e26b6aa8522d5749ab99a489b9125d4:hezN0rf0RM_pD08RwVUa3HTSRfc=:eyJkZWFkbGluZSI6MTU4NzQ0Mzg4NCwiYWN0aW9uIjoiZ2V0IiwidWlkIjoiNzE2OTEyIiwiYWlkIjoiMTY4MjQ4MSIsImZyb20iOiJmaWxlIn0=')
         data.append('file', file)
         // 需要什么就用.get(键值名)  进行获取
